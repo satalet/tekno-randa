@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@600;700&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <!-- مكتبة الرسوم البيانية Chart.js -->
+    <!-- مكتبة Chart.js للرسوم البيانية -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -156,12 +156,12 @@
         .ai-config {
             background-color: #f8fafc;
             border: 1px solid #e2e8f0;
-            padding: 15px;
+            padding: 18px;
             border-radius: 12px;
             margin-bottom: 20px;
         }
 
-        input[type="password"], input[type="text"] {
+        input[type="password"], input[type="text"], select {
             width: 100%;
             padding: 12px;
             border: 1px solid #cbd5e1;
@@ -169,6 +169,7 @@
             font-size: 15px;
             margin-top: 6px;
             margin-bottom: 12px;
+            background-color: #fff;
         }
 
         .btn-action {
@@ -187,6 +188,11 @@
             opacity: 0.9;
         }
 
+        .btn-clear {
+            background-color: #ef4444;
+            margin-right: 8px;
+        }
+
         .ai-result {
             margin-top: 20px;
             padding: 18px;
@@ -195,6 +201,8 @@
             border-right: 4px solid var(--accent);
             display: none;
             white-space: pre-line;
+            font-size: 16px;
+            line-height: 1.8;
         }
 
         .footer {
@@ -260,15 +268,24 @@
         </div>
     </div>
 
-    <!-- التبويب الثالث: الذكاء الاصطناعي -->
+    <!-- التبويب الثالث: الذكاء الاصطناعي مع Gemini 3.8 Flash -->
     <div id="tab3" class="tab-content">
-        <h2>المستشار التكنولوجي الذكي (مدعوم بنموذج Gemini 2.5 Flash)</h2>
-        <p style="color: #64748b; margin-bottom: 15px;">اطرح أي سؤال متعلق بآثار التكنولوجيا أو منهاج الصف التاسع واحصل على تحليل تعليمي دقيق وفوري.</p>
+        <h2 id="modelHeading">المستشار التكنولوجي الذكي (مدعوم بنموذج Gemini 3.8 Flash)</h2>
+        <p style="color: #64748b; margin-bottom: 15px;">اطرح أي سؤال متعلق بآثار التكنولوجيا أو منهاج الصف التاسع واحصل على تحليل تعليمي فوري وفائق الدقة.</p>
         
         <div class="ai-config">
+            <label><strong>اختر النموذج:</strong></label>
+            <select id="modelSelect" onchange="updateModelName()">
+                <option value="gemini-3.8-flash" selected>gemini-3.8-flash (الأسرع والأحدث)</option>
+                <option value="gemini-3.5-flash">gemini-3.5-flash</option>
+                <option value="gemini-2.5-flash">gemini-2.5-flash</option>
+            </select>
+
             <label><strong>مفتاح Gemini API:</strong></label>
-            <input type="password" id="geminiKey" placeholder="الصق مفتاحك هنا (يتم حفظه محلياً في متصفحك فقط)">
-            <button class="btn-action" style="padding: 6px 14px; font-size: 13px;" onclick="saveKey()">حفظ المفتاح محلياً</button>
+            <input type="password" id="geminiKey" placeholder="الصق مفتاحك هنا بدقة...">
+            
+            <button class="btn-action" style="padding: 8px 16px; font-size: 13px;" onclick="saveKey()">حفظ المفتاح محلياً</button>
+            <button class="btn-action btn-clear" style="padding: 8px 16px; font-size: 13px;" onclick="clearKey()">مسح المفتاح</button>
             <span id="keyStatus" style="font-size: 13px; color: #16a34a; margin-right: 10px;"></span>
         </div>
 
@@ -287,7 +304,6 @@
 </div>
 
 <script>
-    // التنقل بين التبويبات
     function switchTab(tabId, btn) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -295,24 +311,32 @@
         btn.classList.add('active');
     }
 
-    // إدارة مفتاح API محلياً
+    function updateModelName() {
+        const sel = document.getElementById('modelSelect').value;
+        document.getElementById('modelHeading').innerText = `المستشار التكنولوجي الذكي (مدعوم بنموذج ${sel})`;
+    }
+
     const storedKey = localStorage.getItem('gemini_api_key') || '';
     if (storedKey) {
         document.getElementById('geminiKey').value = storedKey;
-        document.getElementById('keyStatus').innerText = '✓ المفتاح محفوظ وجاهز للاستخدام';
+        document.getElementById('keyStatus').innerText = '✓ المفتاح محفوظ وجاهز';
     }
 
     function saveKey() {
         const val = document.getElementById('geminiKey').value.trim();
         if (val) {
             localStorage.setItem('gemini_api_key', val);
-            document.getElementById('keyStatus').innerText = '✓ تم حفظ المفتاح بنجاح في متصفحك!';
+            document.getElementById('keyStatus').innerText = '✓ تم حفظ المفتاح بنجاح!';
         }
     }
 
-    // تهيئة الرسوم البيانية
+    function clearKey() {
+        localStorage.removeItem('gemini_api_key');
+        document.getElementById('geminiKey').value = '';
+        document.getElementById('keyStatus').innerText = 'تم مسح المفتاح، يرجى لصق المفتاح الصحيح.';
+    }
+
     window.onload = function() {
-        // الرسم البياني الشريطي
         new Chart(document.getElementById('barChart'), {
             type: 'bar',
             data: {
@@ -332,13 +356,10 @@
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: { position: 'top' }
-                }
+                plugins: { legend: { position: 'top' } }
             }
         });
 
-        // الرسم البياني الدائري
         new Chart(document.getElementById('pieChart'), {
             type: 'doughnut',
             data: {
@@ -360,14 +381,14 @@
         });
     };
 
-    // استدعاء Gemini مباشرة عبر REST API
     async function askGemini() {
         const key = document.getElementById('geminiKey').value.trim();
+        const model = document.getElementById('modelSelect').value;
         const query = document.getElementById('userQuery').value.trim();
         const resultBox = document.getElementById('aiResult');
 
         if (!key) {
-            alert('الرجاء إدخال مفتاح Gemini API أولاً.');
+            alert('الرجاء إدخال مفتاح Gemini API وحفظه.');
             return;
         }
         if (!query) {
@@ -376,10 +397,10 @@
         }
 
         resultBox.style.display = 'block';
-        resultBox.innerText = '⏳ جاري تحليل السؤال والاتصال بالذكاء الاصطناعي...';
+        resultBox.innerText = `⏳ جاري الاتصال بنموذج ${model}...`;
 
         try {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
             const prompt = `أنت معلم ومستشار تكنولوجي لمنهاج الصف التاسع الأساسي. أجب باختصار وبنقاط مرتبة وباللغة العربية الفصحى على السؤال التالي بخصوص آثار التكنولوجيا: ${query}`;
 
             const response = await fetch(url, {

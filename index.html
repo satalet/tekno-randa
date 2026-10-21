@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@600;700&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <!-- مكتبة Chart.js للرسوم البيانية -->
+    <!-- مكتبة Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -152,7 +152,7 @@
             margin-bottom: 8px;
         }
 
-        /* واجهة Gemini الذكية */
+        /* إعدادات الذكاء الاصطناعي */
         .ai-config {
             background-color: #f8fafc;
             border: 1px solid #e2e8f0;
@@ -193,18 +193,16 @@
             margin-right: 8px;
         }
 
-        .status-badge {
+        .pipeline-badge {
             display: inline-block;
-            margin-top: 10px;
-            padding: 6px 12px;
-            border-radius: 6px;
+            margin-top: 12px;
+            padding: 8px 14px;
+            border-radius: 8px;
             font-size: 13px;
             font-weight: bold;
-        }
-
-        .status-online {
-            background-color: #dcfce7;
-            color: #15803d;
+            background-color: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
         }
 
         .ai-result {
@@ -282,23 +280,23 @@
         </div>
     </div>
 
-    <!-- التبويب الثالث: الذكاء الاصطناعي مع التبديل التلقائي الذكي -->
+    <!-- التبويب الثالث: الذكاء الاصطناعي مع أفضل النماذج المتاحة -->
     <div id="tab3" class="tab-content">
-        <h2>المستشار التكنولوجي الذكي (نظام التبديل التلقائي ضد الضغط)</h2>
+        <h2>المستشار التكنولوجي الذكي (نظام السيرفرات المتتالية فائق السرعة)</h2>
         <p style="color: #64748b; margin-bottom: 15px;">
-            يعتمد النظام على <strong>Gemini 3.8 Flash</strong> كنموذج رئيسي فائق السرعة، مع انتقال تلقائي لـ <strong>Gemini 3.5 Flash</strong> ثم <strong>Gemini 2.5 Flash</strong> في حال وجود ضغط على السيرفرات.
+            يعمل هذا القسم تلقائياً بأحدث وأسرع النماذج الفعالة في حسابك لتفادي أي ضغط على السيرفر وضمان الرد الفوري.
         </p>
         
         <div class="ai-config">
             <label><strong>مفتاح Gemini API:</strong></label>
-            <input type="password" id="geminiKey" placeholder="الصق مفتاحك هنا...">
+            <input type="password" id="geminiKey" placeholder="الصق مفتاحك هنا بدقة...">
             
             <button class="btn-action" style="padding: 8px 16px; font-size: 13px;" onclick="saveKey()">حفظ المفتاح محلياً</button>
             <button class="btn-action btn-clear" style="padding: 8px 16px; font-size: 13px;" onclick="clearKey()">مسح المفتاح</button>
             <span id="keyStatus" style="font-size: 13px; color: #16a34a; margin-right: 10px;"></span>
             
             <div>
-                <span class="status-badge status-online">⚡ مسار النماذج المعتمد: gemini-3.8-flash ➔ gemini-3.5-flash ➔ gemini-2.5-flash</span>
+                <span class="pipeline-badge">⚡ مسار المعالجة التلقائي: gemini-3.8-flash ➔ gemini-3.7-flash ➔ gemini-3.5-flash ➔ gemini-flash-latest</span>
             </div>
         </div>
 
@@ -389,7 +387,7 @@
         });
     };
 
-    // دالة الإرسال مع التبديل التلقائي بين النماذج
+    // التبديل الذكي بين أسرع وأدق النماذج المتاحة فعلياً لحسابك
     async function askGeminiWithFailover() {
         const key = document.getElementById('geminiKey').value.trim();
         const query = document.getElementById('userQuery').value.trim();
@@ -404,11 +402,12 @@
             return;
         }
 
-        // قائمة النماذج المرتبة حسب السرعة والدقة مع خطة الطوارئ
+        // أسرع وأدق النماذج من قائمتك المعتمدة
         const models = [
             'gemini-3.8-flash',
+            'gemini-3.7-flash',
             'gemini-3.5-flash',
-            'gemini-2.5-flash'
+            'gemini-flash-latest'
         ];
 
         resultBox.style.display = 'block';
@@ -419,7 +418,7 @@
 
         for (let i = 0; i < models.length; i++) {
             const currentModel = models[i];
-            resultBox.innerText = `⏳ جاري الاتصال بالنموذج الأساسي (${currentModel})...`;
+            resultBox.innerText = `⏳ جاري الاتصال بالنموذج (${currentModel})...`;
 
             try {
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${key}`;
@@ -437,10 +436,10 @@
                     const text = data.candidates[0].content.parts[0].text;
                     resultBox.innerHTML = `<span style="display:inline-block; margin-bottom:8px; font-size:12px; background:#e0f2fe; color:#0369a1; padding:3px 8px; border-radius:4px;">✓ تمت الإجابة بنجاح عبر نموذج: <b>${currentModel}</b></span><br>${text}`;
                     success = true;
-                    break; // تم بنجاح، نخرج من الحلقة
+                    break;
                 } else {
                     lastError = data.error ? data.error.message : 'خطأ غير معروف في الاستجابة';
-                    console.warn(`تعذر النموذج ${currentModel}: ${lastError}، جاري المحاولة مع النموذج التالي...`);
+                    console.warn(`تعذر النموذج ${currentModel}: ${lastError}، جاري المحاولة مع البديل التالي...`);
                 }
             } catch (err) {
                 lastError = err.message;
@@ -449,7 +448,7 @@
         }
 
         if (!success) {
-            resultBox.innerHTML = `<span style="color:#ef4444; font-weight:bold;">⚠️ تعذرت جميع النماذج بسبب ضغط السيرفر أو خطأ بالمفتاح:</span><br>${lastError}`;
+            resultBox.innerHTML = `<span style="color:#ef4444; font-weight:bold;">⚠️ تعذرت جميع النماذج:</span><br>${lastError}`;
         }
     }
 </script>

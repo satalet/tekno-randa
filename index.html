@@ -39,7 +39,6 @@
             margin: 0 auto;
         }
 
-        /* توقيع الطالبة والهيدر */
         .signature-badge {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
@@ -68,7 +67,6 @@
             font-weight: bold;
         }
 
-        /* التبويبات */
         .tabs {
             display: flex;
             gap: 10px;
@@ -107,7 +105,6 @@
             display: block;
         }
 
-        /* تنسيقات البطاقات والرسومات */
         .chart-box {
             position: relative;
             margin: 20px auto;
@@ -152,7 +149,6 @@
             margin-bottom: 8px;
         }
 
-        /* إعدادات الذكاء الاصطناعي */
         .ai-config {
             background-color: #f8fafc;
             border: 1px solid #e2e8f0;
@@ -229,21 +225,18 @@
 <body>
 
 <div class="container">
-    <!-- هيدر وتوقيع الطالبة -->
     <div class="signature-badge">
         <div class="badge-title">مشروع منهاج التكنولوجيا - الصف التاسع الأساسي</div>
         <div class="main-heading">🌐 آثار التكنولوجيا في المجتمع والبيئة</div>
         <div>إعداد وتصميم الطالبة المتميزة: <span class="signature-name">رندة زربا</span> ✨</div>
     </div>
 
-    <!-- أزرار التبويبات -->
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('tab1', this)">📊 الآثار الإيجابية والسلبية</button>
         <button class="tab-btn" onclick="switchTab('tab2', this)">♻️ النفايات الإلكترونية</button>
-        <button class="tab-btn" onclick="switchTab('tab3', this)">🤖 مستشارك الذكي (Auto Failover)</button>
+        <button class="tab-btn" onclick="switchTab('tab3', this)">🤖 مستشارك الذكي</button>
     </div>
 
-    <!-- التبويب الأول: الرسوم والمقارنات -->
     <div id="tab1" class="tab-content active">
         <h2>تحليل أثر التكنولوجيا على قطاعات الحياة الأساسية</h2>
         <div class="chart-box">
@@ -269,7 +262,6 @@
         </div>
     </div>
 
-    <!-- التبويب الثاني: النفايات الإلكترونية -->
     <div id="tab2" class="tab-content">
         <h2>إدارة ومخاطر النفايات الإلكترونية (E-Waste)</h2>
         <p style="margin: 10px 0 20px 0; color: #475569;">
@@ -280,11 +272,10 @@
         </div>
     </div>
 
-    <!-- التبويب الثالث: الذكاء الاصطناعي مع أفضل النماذج المتاحة -->
     <div id="tab3" class="tab-content">
-        <h2>المستشار التكنولوجي الذكي (نظام السيرفرات المتتالية فائق السرعة)</h2>
+        <h2>المستشار التكنولوجي الذكي (نظام السيرفرات المتنوعة المنيع ضد الضغط)</h2>
         <p style="color: #64748b; margin-bottom: 15px;">
-            يعمل هذا القسم تلقائياً بأحدث وأسرع النماذج الفعالة في حسابك لتفادي أي ضغط على السيرفر وضمان الرد الفوري.
+            يتم التحويل التلقائي بين أجيال النماذج وسيرفرات الـ Lite الفورية لضمان تقديم الإجابة حتى في أوقات الذروة.
         </p>
         
         <div class="ai-config">
@@ -296,12 +287,12 @@
             <span id="keyStatus" style="font-size: 13px; color: #16a34a; margin-right: 10px;"></span>
             
             <div>
-                <span class="pipeline-badge">⚡ مسار المعالجة التلقائي: gemini-3.8-flash ➔ gemini-3.7-flash ➔ gemini-3.5-flash ➔ gemini-flash-latest</span>
+                <span class="pipeline-badge">⚡ مسار التبديل الذكي: 3.8-flash ➔ 3.5-flash ➔ 2.5-flash ➔ 2.5-flash-lite</span>
             </div>
         </div>
 
         <label><strong>اكتب استفسارك هنا:</strong></label>
-        <input type="text" id="userQuery" placeholder="مثال: كيف أثرت التكنولوجيا على البيئة المدرسية سلباً وإيجاباً؟">
+        <input type="text" id="userQuery" placeholder="مثال: ما هي مخاطر التكنولوجيا السلبية بشكل عام ع المجتمع؟">
         
         <button class="btn-action" onclick="askGeminiWithFailover()">إرسال الاستفسار للذكاء الاصطناعي</button>
         
@@ -387,7 +378,6 @@
         });
     };
 
-    // التبديل الذكي بين أسرع وأدق النماذج المتاحة فعلياً لحسابك
     async function askGeminiWithFailover() {
         const key = document.getElementById('geminiKey').value.trim();
         const query = document.getElementById('userQuery').value.trim();
@@ -402,19 +392,19 @@
             return;
         }
 
-        // أسرع وأدق النماذج من قائمتك المعتمدة
+        // مسار متنوع بسيرفرات مختلفة ومقاومة للضغط
         const models = [
             'gemini-3.8-flash',
-            'gemini-3.7-flash',
             'gemini-3.5-flash',
-            'gemini-flash-latest'
+            'gemini-2.5-flash',
+            'gemini-2.5-flash-lite'
         ];
 
         resultBox.style.display = 'block';
         const prompt = `أنت معلم ومستشار تكنولوجي لمنهاج الصف التاسع الأساسي. أجب باختصار وبنقاط مرتبة وباللغة العربية الفصحى على السؤال التالي بخصوص آثار التكنولوجيا: ${query}`;
 
         let success = false;
-        let lastError = '';
+        let attemptLogs = [];
 
         for (let i = 0; i < models.length; i++) {
             const currentModel = models[i];
@@ -432,23 +422,22 @@
 
                 const data = await response.json();
 
-                if (response.ok && data.candidates && data.candidates[0].content.parts[0].text) {
+                if (response.ok && data.candidates && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
                     const text = data.candidates[0].content.parts[0].text;
-                    resultBox.innerHTML = `<span style="display:inline-block; margin-bottom:8px; font-size:12px; background:#e0f2fe; color:#0369a1; padding:3px 8px; border-radius:4px;">✓ تمت الإجابة بنجاح عبر نموذج: <b>${currentModel}</b></span><br>${text}`;
+                    resultBox.innerHTML = `<span style="display:inline-block; margin-bottom:8px; font-size:12px; background:#e0f2fe; color:#0369a1; padding:3px 8px; border-radius:4px;">✓ تمت الإجابة بنجاح عبر سيرفر نموذج: <b>${currentModel}</b></span><br>${text}`;
                     success = true;
                     break;
                 } else {
-                    lastError = data.error ? data.error.message : 'خطأ غير معروف في الاستجابة';
-                    console.warn(`تعذر النموذج ${currentModel}: ${lastError}، جاري المحاولة مع البديل التالي...`);
+                    const msg = data.error ? data.error.message : 'خطأ غير معروف';
+                    attemptLogs.push(`- ${currentModel}: ${msg}`);
                 }
             } catch (err) {
-                lastError = err.message;
-                console.warn(`فشل الاتصال بالنموذج ${currentModel}: ${lastError}`);
+                attemptLogs.push(`- ${currentModel}: ${err.message}`);
             }
         }
 
         if (!success) {
-            resultBox.innerHTML = `<span style="color:#ef4444; font-weight:bold;">⚠️ تعذرت جميع النماذج:</span><br>${lastError}`;
+            resultBox.innerHTML = `<span style="color:#ef4444; font-weight:bold;">⚠️ تعذرت المحاولات:</span><br>` + attemptLogs.join('<br>');
         }
     }
 </script>

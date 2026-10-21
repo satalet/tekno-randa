@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مشروع التكنولوجيا - آثار التكنولوجيا في المجتمع</title>
+    <!-- خطوط جوجل -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@600;700&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- مكتبة الرسوم البيانية Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #1e3c72;
+            --secondary: #2a5298;
+            --accent: #00d2ff;
+            --bg: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-dark: #2c3e50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* توقيع الطالبة والهيدر */
+        .signature-badge {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            margin-bottom: 25px;
+            border-right: 8px solid var(--accent);
+        }
+
+        .badge-title {
+            font-size: 14px;
+            color: #dcdde1;
+        }
+
+        .main-heading {
+            font-size: 26px;
+            font-weight: 900;
+            margin: 6px 0;
+        }
+
+        .signature-name {
+            font-family: 'Reem Kufi', sans-serif;
+            font-size: 28px;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* التبويبات */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background-color: #e2e8f0;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-dark);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 10px rgba(30, 60, 114, 0.25);
+        }
+
+        .tab-content {
+            display: none;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* تنسيقات البطاقات والرسومات */
+        .chart-box {
+            position: relative;
+            margin: 20px auto;
+            max-width: 750px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .card {
+            padding: 20px;
+            border-radius: 12px;
+            border-top: 4px solid;
+        }
+
+        .card-positive {
+            background-color: #f0fdf4;
+            border-color: #22c55e;
+        }
+
+        .card-negative {
+            background-color: #fef2f2;
+            border-color: #ef4444;
+        }
+
+        .card h3 {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        ul {
+            padding-right: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* واجهة Gemini الذكية */
+        .ai-config {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        input[type="password"], input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            margin-top: 6px;
+            margin-bottom: 12px;
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-action:hover {
+            opacity: 0.9;
+        }
+
+        .ai-result {
+            margin-top: 20px;
+            padding: 18px;
+            background-color: #f1f5f9;
+            border-radius: 10px;
+            border-right: 4px solid var(--accent);
+            display: none;
+            white-space: pre-line;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            color: #64748b;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- هيدر وتوقيع الطالبة -->
+    <div class="signature-badge">
+        <div class="badge-title">مشروع منهاج التكنولوجيا - الصف التاسع الأساسي</div>
+        <div class="main-heading">🌐 آثار التكنولوجيا في المجتمع والبيئة</div>
+        <div>إعداد وتصميم الطالبة المتميزة: <span class="signature-name">رندة زربا</span> ✨</div>
+    </div>
+
+    <!-- أزرار التبويبات -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('tab1', this)">📊 الآثار الإيجابية والسلبية</button>
+        <button class="tab-btn" onclick="switchTab('tab2', this)">♻️ النفايات الإلكترونية</button>
+        <button class="tab-btn" onclick="switchTab('tab3', this)">🤖 مستشارك الذكي (Gemini)</button>
+    </div>
+
+    <!-- التبويب الأول: الرسوم والمقارنات -->
+    <div id="tab1" class="tab-content active">
+        <h2>تحليل أثر التكنولوجيا على قطاعات الحياة الأساسية</h2>
+        <div class="chart-box">
+            <canvas id="barChart"></canvas>
+        </div>
+        <div class="cards-grid">
+            <div class="card card-positive">
+                <h3>✅ أبرز الآثار الإيجابية</h3>
+                <ul>
+                    <li><strong>التعليم:</strong> تسهيل الوصول لمصادر المعرفة المفتوحة ومنصات التعليم الذاتي.</li>
+                    <li><strong>الرعاية الصحية:</strong> دقة الفحوصات الطبية وأجهزة التشخيص والعمليات بالروبوت.</li>
+                    <li><strong>الإنتاجية:</strong> توفير الوقت والجهد عبر أتمتة الأعمال الإدارية والصناعية.</li>
+                </ul>
+            </div>
+            <div class="card card-negative">
+                <h3>⚠️ أبرز المخاطر والتحديات</h3>
+                <ul>
+                    <li><strong>الجانب الاجتماعي:</strong> قلة التواصل الإنساني المباشر وظاهرة إدمان الشاشات.</li>
+                    <li><strong>الأمن الرقمي:</strong> التهديدات السيبرانية واختراق الخصوصية والمعلومات الشخصية.</li>
+                    <li><strong>سوق العمل:</strong> اندثار وظائف تقليدية وحاجة ماسة لتعلم مهارات تقنية جديدة.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- التبويب الثاني: النفايات الإلكترونية -->
+    <div id="tab2" class="tab-content">
+        <h2>إدارة ومخاطر النفايات الإلكترونية (E-Waste)</h2>
+        <p style="margin: 10px 0 20px 0; color: #475569;">
+            النفايات الإلكترونية هي الأجهزة الكهربائية والمعدات الرقمية التالفة. سوء التعامل معها وحرقها العشوائي يؤدي لانبعاث غازات سامة وتسرب عناصر ثقيلة خطيرة تلوث المياه الجوفية والتربة.
+        </p>
+        <div class="chart-box" style="max-width: 450px;">
+            <canvas id="pieChart"></canvas>
+        </div>
+    </div>
+
+    <!-- التبويب الثالث: الذكاء الاصطناعي -->
+    <div id="tab3" class="tab-content">
+        <h2>المستشار التكنولوجي الذكي (مدعوم بنموذج Gemini 2.5 Flash)</h2>
+        <p style="color: #64748b; margin-bottom: 15px;">اطرح أي سؤال متعلق بآثار التكنولوجيا أو منهاج الصف التاسع واحصل على تحليل تعليمي دقيق وفوري.</p>
+        
+        <div class="ai-config">
+            <label><strong>مفتاح Gemini API:</strong></label>
+            <input type="password" id="geminiKey" placeholder="الصق مفتاحك هنا (يتم حفظه محلياً في متصفحك فقط)">
+            <button class="btn-action" style="padding: 6px 14px; font-size: 13px;" onclick="saveKey()">حفظ المفتاح محلياً</button>
+            <span id="keyStatus" style="font-size: 13px; color: #16a34a; margin-right: 10px;"></span>
+        </div>
+
+        <label><strong>اكتب استفسارك هنا:</strong></label>
+        <input type="text" id="userQuery" placeholder="مثال: ما هي الطرق السليمة للتعامل مع النفايات الإلكترونية في المدارس؟">
+        
+        <button class="btn-action" onclick="askGemini()">إرسال الاستفسار للذكاء الاصطناعي</button>
+        
+        <div id="aiResult" class="ai-result"></div>
+    </div>
+
+    <div class="footer">
+        تم تطوير هذا المشروع التفاعلي لدعم مادة التكنولوجيا - الصف التاسع الأساسي<br>
+        بإشراف وتصميم الطالبة المتميزة: <strong>رندة زربا</strong> 🌟
+    </div>
+</div>
+
+<script>
+    // التنقل بين التبويبات
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
+    }
+
+    // إدارة مفتاح API محلياً
+    const storedKey = localStorage.getItem('gemini_api_key') || '';
+    if (storedKey) {
+        document.getElementById('geminiKey').value = storedKey;
+        document.getElementById('keyStatus').innerText = '✓ المفتاح محفوظ وجاهز للاستخدام';
+    }
+
+    function saveKey() {
+        const val = document.getElementById('geminiKey').value.trim();
+        if (val) {
+            localStorage.setItem('gemini_api_key', val);
+            document.getElementById('keyStatus').innerText = '✓ تم حفظ المفتاح بنجاح في متصفحك!';
+        }
+    }
+
+    // تهيئة الرسوم البيانية
+    window.onload = function() {
+        // الرسم البياني الشريطي
+        new Chart(document.getElementById('barChart'), {
+            type: 'bar',
+            data: {
+                labels: ['التعليم', 'الصحة', 'التواصل الاجتماعي', 'البيئة والمناخ', 'سوق العمل'],
+                datasets: [
+                    {
+                        label: 'الأثر الإيجابي (%)',
+                        data: [88, 92, 75, 45, 80],
+                        backgroundColor: '#22c55e'
+                    },
+                    {
+                        label: 'المخاطر والتحديات (%)',
+                        data: [12, 8, 25, 55, 20],
+                        backgroundColor: '#ef4444'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' }
+                }
+            }
+        });
+
+        // الرسم البياني الدائري
+        new Chart(document.getElementById('pieChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['معادن قابلة للتدوير', 'بلاستيك', 'عناصر سامة وخطرة (رصاص/زئبق)', 'زجاج ومواد أخرى'],
+                datasets: [{
+                    data: [35, 30, 15, 20],
+                    backgroundColor: ['#3b82f6', '#f59e0b', '#ef4444', '#10b981']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'المكونات التقريبية للأجهزة الإلكترونية التالفة'
+                    }
+                }
+            }
+        });
+    };
+
+    // استدعاء Gemini مباشرة عبر REST API
+    async function askGemini() {
+        const key = document.getElementById('geminiKey').value.trim();
+        const query = document.getElementById('userQuery').value.trim();
+        const resultBox = document.getElementById('aiResult');
+
+        if (!key) {
+            alert('الرجاء إدخال مفتاح Gemini API أولاً.');
+            return;
+        }
+        if (!query) {
+            alert('الرجاء كتابة السؤال.');
+            return;
+        }
+
+        resultBox.style.display = 'block';
+        resultBox.innerText = '⏳ جاري تحليل السؤال والاتصال بالذكاء الاصطناعي...';
+
+        try {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`;
+            const prompt = `أنت معلم ومستشار تكنولوجي لمنهاج الصف التاسع الأساسي. أجب باختصار وبنقاط مرتبة وباللغة العربية الفصحى على السؤال التالي بخصوص آثار التكنولوجيا: ${query}`;
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }]
+                })
+            });
+
+            const data = await response.json();
+            if (data.candidates && data.candidates[0].content.parts[0].text) {
+                resultBox.innerText = data.candidates[0].content.parts[0].text;
+            } else if (data.error) {
+                resultBox.innerText = '⚠️ خطأ من النموذج: ' + data.error.message;
+            } else {
+                resultBox.innerText = '⚠️ لم يتم تلقي رد مناسب.';
+            }
+        } catch (err) {
+            resultBox.innerText = '⚠️ تعذر الاتصال: ' + err.message;
+        }
+    }
+</script>
+
+</body>
+</html>
